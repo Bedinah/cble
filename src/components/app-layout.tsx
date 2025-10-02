@@ -23,6 +23,7 @@ import {
   FileText,
   BarChart3,
   Settings,
+  Flame,
 } from 'lucide-react';
 import { Logo } from './logo';
 import { UserNav } from './user-nav';
