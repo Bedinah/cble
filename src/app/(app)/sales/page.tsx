@@ -7,10 +7,10 @@ import { Badge } from '@/components/ui/badge';
 import { products as initialProducts, customers as initialCustomers, sales as initialSales } from '@/lib/data';
 import type { Product, Sale, Customer } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MinusCircle, PlusCircle, ShoppingCart, X, CreditCard, Wallet, UserPlus } from 'lucide-react';
+import { MinusCircle, PlusCircle, ShoppingCart, X, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AddCustomerForm } from '@/components/customers/add-customer-form';
@@ -20,18 +20,24 @@ type CartItem = {
   quantity: number;
 };
 
-type PaymentMethod = 'cash' | 'credit';
-
 export default function SalesPage() {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [sales, setSales] = useState<Sale[]>(initialSales);
   const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCustomer, setSelectedCustomer] = useState<string>('walk-in');
-  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
   const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false);
+  const [amountPaid, setAmountPaid] = useState(0);
 
   const { toast } = useToast();
+  
+  const cartTotal = cart.reduce((total, item) => total + item.product.retailPrice * item.quantity, 0);
+
+  // Update amountPaid when cartTotal changes
+  useState(() => {
+    setAmountPaid(cartTotal);
+  }, [cartTotal]);
+
 
   const handleAddCustomer = (newCustomerData: Omit<Customer, 'id' | 'avatarUrl' | 'debt'>) => {
     const newCustomer: Customer = {
@@ -108,8 +114,6 @@ export default function SalesPage() {
         );
     });
   };
-  
-  const cartTotal = cart.reduce((total, item) => total + item.product.retailPrice * item.quantity, 0);
 
   const completeSale = () => {
     if (cart.length === 0) {
@@ -121,15 +125,26 @@ export default function SalesPage() {
       return;
     }
 
-    if (paymentMethod === 'credit' && selectedCustomer === 'walk-in') {
+    const debtAmount = cartTotal - amountPaid;
+
+    if (debtAmount > 0 && selectedCustomer === 'walk-in') {
       toast({
-        title: 'Invalid Customer',
-        description: 'Please select or add a registered customer for credit sales.',
+        title: 'Invalid Customer for Credit',
+        description: 'Walk-in customers cannot have debt. Please select a registered customer or have them pay in full.',
         variant: 'destructive'
       });
       return;
     }
 
+    if (amountPaid < 0) {
+        toast({
+            title: 'Invalid Amount',
+            description: 'Amount paid cannot be negative.',
+            variant: 'destructive'
+        });
+        return;
+    }
+    
     // 1. Create the new sale record
     const newSale: Sale = {
       id: `sale_${sales.length + 1}`,
@@ -155,26 +170,28 @@ export default function SalesPage() {
       });
     });
 
-    // 3. Update customer debt if it's a credit sale
-    if (paymentMethod === 'credit') {
+    // 3. Update customer debt if there is a balance
+    if (debtAmount > 0) {
       setCustomers(prevCustomers => 
         prevCustomers.map(c => 
-          c.id === selectedCustomer ? { ...c, debt: c.debt + cartTotal } : c
+          c.id === selectedCustomer ? { ...c, debt: c.debt + debtAmount } : c
         )
       );
     }
 
-    // 4. Clear the cart and reset customer/payment
+    // 4. Clear the cart and reset form
     setCart([]);
     setSelectedCustomer('walk-in');
-    setPaymentMethod('cash');
+    setAmountPaid(0);
 
     // 5. Show success message
     toast({
       title: 'Sale Completed!',
-      description: `Total: RWF ${cartTotal.toLocaleString()}. Paid by ${paymentMethod}.`,
+      description: `Total: RWF ${cartTotal.toLocaleString()}. Amount Paid: RWF ${amountPaid.toLocaleString()}.${debtAmount > 0 ? ` RWF ${debtAmount.toLocaleString()} added to debt.` : ''}`,
     });
   };
+  
+  const isWalkIn = selectedCustomer === 'walk-in';
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 h-[calc(100vh-10rem)]">
@@ -241,7 +258,7 @@ export default function SalesPage() {
                 <div className="space-y-2">
                     <Label>Customer</Label>
                     <div className="flex gap-2">
-                      <Select onValueChange={setSelectedCustomer} value={selectedCustomer}>
+                      <Select onValueChange={(value) => { setSelectedCustomer(value); if (value === 'walk-in') { setAmountPaid(cartTotal) } }} value={selectedCustomer}>
                           <SelectTrigger>
                               <SelectValue placeholder="Select a customer..." />
                           </SelectTrigger>
@@ -269,25 +286,31 @@ export default function SalesPage() {
                     </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label>Payment Method</Label>
-                  <RadioGroup value={paymentMethod} className="flex" onValueChange={(value: PaymentMethod) => setPaymentMethod(value)}>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="cash" id="cash" />
-                      <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer"><Wallet className="w-4 h-4" /> Cash</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="credit" id="credit" />
-                      <Label htmlFor="credit" className="flex items-center gap-2 cursor-pointer"><CreditCard className="w-4 h-4" /> On Credit</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                <Separator />
                 <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
                     <span>RWF {cartTotal.toLocaleString()}</span>
                 </div>
+
+                <div className="space-y-2">
+                   <Label htmlFor="amount-paid">Amount Paid (RWF)</Label>
+                    <Input 
+                      id="amount-paid"
+                      type="number"
+                      value={isWalkIn ? cartTotal : amountPaid}
+                      onChange={(e) => setAmountPaid(Number(e.target.value))}
+                      disabled={isWalkIn}
+                      placeholder="Enter amount paid"
+                    />
+                </div>
+
+                {cartTotal - amountPaid > 0 && !isWalkIn && (
+                  <div className="text-sm font-medium text-destructive text-center">
+                    Remaining Debt: RWF {(cartTotal - amountPaid).toLocaleString()}
+                  </div>
+                )}
+                
+                <Separator />
+
                 <Button onClick={completeSale}>Complete Sale</Button>
             </CardFooter>
           )}
