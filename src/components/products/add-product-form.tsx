@@ -24,7 +24,7 @@ import type { Product } from '@/lib/types';
 
 const productSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters.'),
-  category: z.enum(['Beers', 'Spirits', 'Soft Drinks', 'Wines']),
+  category: z.enum(['Beers', 'Spirits', 'Soft Drinks', 'Wines', 'Snacks']),
   retailPrice: z.coerce.number().min(0, 'Retail price must be a positive number.'),
   wholesalePrice: z.coerce.number().min(0, 'Wholesale price must be a positive number.'),
   unitsPerCase: z.coerce.number().min(1, 'Units per case must be at least 1.'),
@@ -47,9 +47,9 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
       category: 'Beers',
       retailPrice: 0,
       wholesalePrice: 0,
-      unitsPerCase: 1,
+      unitsPerCase: 24,
       stock: 0,
-      lowStockThreshold: 0,
+      lowStockThreshold: 10,
     },
   });
 
@@ -91,6 +91,7 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
                   <SelectItem value="Spirits">Spirits</SelectItem>
                   <SelectItem value="Soft Drinks">Soft Drinks</SelectItem>
                   <SelectItem value="Wines">Wines</SelectItem>
+                  <SelectItem value="Snacks">Snacks</SelectItem>
                 </SelectContent>
               </Select>
               <FormMessage />
@@ -104,6 +105,7 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
             render={({ field }) => (
                 <FormItem>
                 <FormLabel>Retail Price</FormLabel>
+                 <FormDescription>Per bottle/shot</FormDescription>
                 <FormControl>
                     <Input type="number" {...field} />
                 </FormControl>
@@ -117,6 +119,7 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
             render={({ field }) => (
                 <FormItem>
                 <FormLabel>Wholesale Price</FormLabel>
+                <FormDescription>Per case</FormDescription>
                 <FormControl>
                     <Input type="number" {...field} />
                 </FormControl>
@@ -131,10 +134,11 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
             name="unitsPerCase"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel>Units/Case</FormLabel>
+                <FormLabel>Units Per Case</FormLabel>
                 <FormControl>
                     <Input type="number" {...field} />
                 </FormControl>
+                 <FormDescription>e.g. 24 bottles</FormDescription>
                 <FormMessage />
                 </FormItem>
             )}
@@ -148,6 +152,7 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
                 <FormControl>
                     <Input type="number" {...field} />
                 </FormControl>
+                 <FormDescription>In units</FormDescription>
                 <FormMessage />
                 </FormItem>
             )}
@@ -162,6 +167,7 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
+               <FormDescription>Alert when stock falls to this level</FormDescription>
               <FormMessage />
             </FormItem>
           )}

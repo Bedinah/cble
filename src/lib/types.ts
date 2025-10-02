@@ -1,7 +1,7 @@
 export interface Product {
   id: string;
   name: string;
-  category: 'Beers' | 'Spirits' | 'Soft Drinks' | 'Wines';
+  category: 'Beers' | 'Spirits' | 'Soft Drinks' | 'Wines' | 'Snacks';
   retailPrice: number;
   wholesalePrice: number;
   unitsPerCase: number;
