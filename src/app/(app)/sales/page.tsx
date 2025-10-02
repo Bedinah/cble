@@ -4,23 +4,29 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { products as initialProducts, customers, sales as initialSales } from '@/lib/data';
+import { products as initialProducts, customers as initialCustomers, sales as initialSales } from '@/lib/data';
 import type { Product, Sale, Customer } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MinusCircle, PlusCircle, ShoppingCart, X } from 'lucide-react';
+import { MinusCircle, PlusCircle, ShoppingCart, X, CreditCard, Wallet } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Label } from '@/components/ui/label';
 
 type CartItem = {
   product: Product;
   quantity: number;
 };
 
+type PaymentMethod = 'cash' | 'credit';
+
 export default function SalesPage() {
   const [products, setProducts] = useState<Product[]>(initialProducts);
   const [sales, setSales] = useState<Sale[]>(initialSales);
+  const [customers, setCustomers] = useState<Customer[]>(initialCustomers);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCustomer, setSelectedCustomer] = useState<string>('walk-in');
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
 
   const { toast } = useToast();
 
@@ -92,6 +98,15 @@ export default function SalesPage() {
       return;
     }
 
+    if (paymentMethod === 'credit' && selectedCustomer === 'walk-in') {
+      toast({
+        title: 'Invalid Customer',
+        description: 'Please select a registered customer for credit sales.',
+        variant: 'destructive'
+      });
+      return;
+    }
+
     // 1. Create the new sale record
     const newSale: Sale = {
       id: `sale_${sales.length + 1}`,
@@ -117,14 +132,24 @@ export default function SalesPage() {
       });
     });
 
-    // 3. Clear the cart and reset customer
+    // 3. Update customer debt if it's a credit sale
+    if (paymentMethod === 'credit') {
+      setCustomers(prevCustomers => 
+        prevCustomers.map(c => 
+          c.id === selectedCustomer ? { ...c, debt: c.debt + cartTotal } : c
+        )
+      );
+    }
+
+    // 4. Clear the cart and reset customer/payment
     setCart([]);
     setSelectedCustomer('walk-in');
+    setPaymentMethod('cash');
 
-    // 4. Show success message
+    // 5. Show success message
     toast({
       title: 'Sale Completed!',
-      description: `Total: RWF ${cartTotal.toLocaleString()}`,
+      description: `Total: RWF ${cartTotal.toLocaleString()}. Paid by ${paymentMethod}.`,
     });
   };
 
@@ -191,6 +216,7 @@ export default function SalesPage() {
           {cart.length > 0 && (
              <CardFooter className="flex-col items-stretch space-y-4 border-t pt-4">
                 <div className="space-y-2">
+                    <Label>Customer</Label>
                     <Select onValueChange={setSelectedCustomer} value={selectedCustomer}>
                         <SelectTrigger>
                             <SelectValue placeholder="Select a customer..." />
@@ -203,6 +229,21 @@ export default function SalesPage() {
                         </SelectContent>
                     </Select>
                 </div>
+
+                <div className="space-y-2">
+                  <Label>Payment Method</Label>
+                  <RadioGroup defaultValue="cash" className="flex" onValueChange={(value: PaymentMethod) => setPaymentMethod(value)}>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="cash" id="cash" />
+                      <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer"><Wallet className="w-4 h-4" /> Cash</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="credit" id="credit" />
+                      <Label htmlFor="credit" className="flex items-center gap-2 cursor-pointer"><CreditCard className="w-4 h-4" /> On Credit</Label>
+                    </div>
+                  </RadioGroup>
+                </div>
+
                 <Separator />
                 <div className="flex justify-between font-bold text-lg">
                     <span>Total</span>
