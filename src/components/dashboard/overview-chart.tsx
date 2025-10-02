@@ -1,7 +1,7 @@
 'use client';
 
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 
 const data = [
@@ -29,7 +29,8 @@ export function OverviewChart() {
   return (
     <Card className="col-span-1 lg:col-span-2">
       <CardHeader>
-        <CardTitle className="font-headline">Monthly Overview</CardTitle>
+        <CardTitle className="font-headline">Monthly Revenue vs. Expenses</CardTitle>
+        <CardDescription>An overview of your income and spending per month.</CardDescription>
       </CardHeader>
       <CardContent className="pl-2">
         <ChartContainer config={chartConfig} className="min-h-[350px] w-full">
