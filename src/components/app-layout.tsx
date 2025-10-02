@@ -1,0 +1,93 @@
+'use client';
+
+import * as React from 'react';
+import { usePathname } from 'next/navigation';
+import {
+  SidebarProvider,
+  Sidebar,
+  SidebarHeader,
+  SidebarContent,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarFooter,
+  SidebarTrigger,
+  SidebarInset,
+} from '@/components/ui/sidebar';
+import {
+  LayoutDashboard,
+  Beer,
+  Boxes,
+  ShoppingCart,
+  Users,
+  FileText,
+  BarChart3,
+  Settings,
+} from 'lucide-react';
+import { Logo } from './logo';
+import { UserNav } from './user-nav';
+
+const menuItems = [
+  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/products', label: 'Products', icon: Beer },
+  { href: '/stock', label: 'Stock', icon: Boxes },
+  { href: '/sales', label: 'Sales', icon: ShoppingCart },
+  { href: '/customers', label: 'Customers', icon: Users },
+  { href: '/expenses', label: 'Expenses', icon: FileText },
+  { href: '/reports', label: 'Reports', icon: BarChart3 },
+];
+
+export function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  return (
+    <SidebarProvider>
+      <Sidebar>
+        <SidebarHeader>
+          <Logo />
+        </SidebarHeader>
+        <SidebarContent>
+          <SidebarMenu>
+            {menuItems.map((item) => (
+              <SidebarMenuItem key={item.href}>
+                <SidebarMenuButton
+                  asChild
+                  isActive={pathname === item.href}
+                  tooltip={item.label}
+                >
+                  <a href={item.href}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            ))}
+          </SidebarMenu>
+        </SidebarContent>
+        <SidebarFooter>
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild tooltip="Settings" isActive={pathname === '/settings'}>
+                <a href="/settings">
+                  <Settings />
+                  <span>Settings</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
+      <SidebarInset>
+        <header className="flex h-14 items-center justify-between border-b bg-card px-4 lg:px-6">
+          <SidebarTrigger className="md:hidden" />
+          <div className="ml-auto">
+            <UserNav />
+          </div>
+        </header>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+          {children}
+        </main>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
