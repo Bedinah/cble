@@ -57,9 +57,9 @@ export default function ProductsPage() {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Category</TableHead>
-              <TableHead>Retail Price</TableHead>
+              <TableHead>Retail Price (unit)</TableHead>
+              <TableHead>Wholesale Price (case)</TableHead>
               <TableHead>Stock (units)</TableHead>
-              <TableHead>Stock (cases)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -70,8 +70,8 @@ export default function ProductsPage() {
                   <Badge variant="outline">{product.category}</Badge>
                 </TableCell>
                 <TableCell>RWF {product.retailPrice.toLocaleString()}</TableCell>
+                <TableCell>RWF {product.wholesalePrice.toLocaleString()}</TableCell>
                 <TableCell>{product.stock}</TableCell>
-                <TableCell>{(product.stock / product.unitsPerCase).toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
