@@ -6,23 +6,50 @@ import { OverviewChart } from '@/components/dashboard/overview-chart';
 import { BestSellers } from '@/components/dashboard/best-sellers';
 import { sales, expenses, customers } from '@/lib/data';
 import { LowStockTable } from '@/components/dashboard/low-stock-table';
+import { subDays } from 'date-fns';
+
+// Helper to calculate percentage change
+const calculateChange = (current: number, previous: number) => {
+  if (previous === 0) {
+    return current > 0 ? 100 : 0;
+  }
+  return ((current - previous) / previous) * 100;
+};
 
 export default function DashboardPage() {
   const totalRevenue = sales.reduce((sum, sale) => sum + sale.total, 0);
   const totalExpenses = expenses.reduce((sum, expense) => sum + expense.amount, 0);
   
+  const today = new Date();
+  const yesterday = subDays(today, 1);
+
+  const todayStr = today.toISOString().split('T')[0];
+  const yesterdayStr = yesterday.toISOString().split('T')[0];
+
   // Today's stats
-  const today = new Date().toISOString().split('T')[0];
   const revenueToday = sales
-    .filter(s => s.date.startsWith(today))
+    .filter(s => s.date.startsWith(todayStr))
     .reduce((sum, sale) => sum + sale.total, 0);
 
   const expensesToday = expenses
-    .filter(e => e.date.startsWith(today))
+    .filter(e => e.date.startsWith(todayStr))
     .reduce((sum, expense) => sum + expense.amount, 0);
     
   const earningsToday = revenueToday - expensesToday;
+
+  // Yesterday's stats
+  const revenueYesterday = sales
+    .filter(s => s.date.startsWith(yesterdayStr))
+    .reduce((sum, sale) => sum + sale.total, 0);
+
+  const expensesYesterday = expenses
+    .filter(e => e.date.startsWith(yesterdayStr))
+    .reduce((sum, expense) => sum + expense.amount, 0);
+    
   const totalDebt = customers.reduce((sum, customer) => sum + customer.debt, 0);
+
+  const revenueChange = calculateChange(revenueToday, revenueYesterday);
+  const expensesChange = calculateChange(expensesToday, expensesYesterday);
 
 
   return (
@@ -32,13 +59,15 @@ export default function DashboardPage() {
           title="Revenue (Today)"
           value={`RWF ${revenueToday.toLocaleString()}`}
           icon={DollarSign}
-          description="Total sales recorded today"
+          description={`${revenueChange >= 0 ? '+' : ''}${revenueChange.toFixed(1)}% from yesterday`}
+          colorClass={revenueChange >= 0 ? 'text-accent' : 'text-destructive'}
         />
         <StatCard
           title="Expenses (Today)"
           value={`RWF ${expensesToday.toLocaleString()}`}
           icon={TrendingDown}
-          description="Total expenses logged today"
+          description={`${expensesChange >= 0 ? '+' : ''}${expensesChange.toFixed(1)}% from yesterday`}
+          colorClass={expensesChange > 0 ? 'text-destructive' : 'text-accent'}
         />
         <StatCard
           title="Earnings (Today)"
