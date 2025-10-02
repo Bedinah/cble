@@ -59,6 +59,7 @@ export default function ProductsPage() {
               <TableHead>Category</TableHead>
               <TableHead>Retail Price</TableHead>
               <TableHead>Stock (units)</TableHead>
+              <TableHead>Stock (cases)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -70,6 +71,7 @@ export default function ProductsPage() {
                 </TableCell>
                 <TableCell>RWF {product.retailPrice.toLocaleString()}</TableCell>
                 <TableCell>{product.stock}</TableCell>
+                <TableCell>{(product.stock / product.unitsPerCase).toFixed(2)}</TableCell>
               </TableRow>
             ))}
           </TableBody>
