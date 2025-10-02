@@ -7,7 +7,6 @@ export interface Product {
   unitsPerCase: number;
   stock: number;
   lowStockThreshold: number;
-  expiryDate: string;
 }
 
 export interface Sale {

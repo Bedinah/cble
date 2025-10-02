@@ -58,8 +58,7 @@ export default function ProductsPage() {
               <TableHead>Name</TableHead>
               <TableHead>Category</TableHead>
               <TableHead>Retail Price</TableHead>
-              <TableHead>Stock</TableHead>
-              <TableHead>Expiry Date</TableHead>
+              <TableHead>Stock (units)</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -71,7 +70,6 @@ export default function ProductsPage() {
                 </TableCell>
                 <TableCell>RWF {product.retailPrice.toLocaleString()}</TableCell>
                 <TableCell>{product.stock}</TableCell>
-                <TableCell>{product.expiryDate}</TableCell>
               </TableRow>
             ))}
           </TableBody>

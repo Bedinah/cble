@@ -15,11 +15,6 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
-import { cn } from '@/lib/utils';
 import type { Product } from '@/lib/types';
 
 const productSchema = z.object({
@@ -30,9 +25,6 @@ const productSchema = z.object({
   unitsPerCase: z.coerce.number().min(1, 'Units per case must be at least 1.'),
   stock: z.coerce.number().min(0, 'Stock cannot be negative.'),
   lowStockThreshold: z.coerce.number().min(0, 'Low stock threshold must be a positive number.'),
-  expiryDate: z.date({
-    required_error: "An expiry date is required.",
-  }),
 });
 
 type AddProductFormProps = {
@@ -54,7 +46,7 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
   });
 
   function onSubmit(values: z.infer<typeof productSchema>) {
-    onAddProduct({ ...values, expiryDate: format(values.expiryDate, 'yyyy-MM-dd') });
+    onAddProduct(values);
     form.reset();
   }
 
@@ -152,7 +144,7 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
                 <FormControl>
                     <Input type="number" {...field} />
                 </FormControl>
-                 <FormDescription>In units</FormDescription>
+                 <FormDescription>In units (pieces)</FormDescription>
                 <FormMessage />
                 </FormItem>
             )}
@@ -167,48 +159,7 @@ export function AddProductForm({ onAddProduct }: AddProductFormProps) {
               <FormControl>
                 <Input type="number" {...field} />
               </FormControl>
-               <FormDescription>Alert when stock falls to this level</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="expiryDate"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Expiry Date</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-full pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
-                  </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date()
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
+               <FormDescription>Alert when stock (in units) falls to this level</FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -2,12 +2,12 @@ import type { Product, Sale, Customer, Expense } from './types';
 import { subDays, subHours } from 'date-fns';
 
 export const products: Product[] = [
-  { id: 'prod_1', name: 'Heineken 330ml', category: 'Beers', retailPrice: 2000, wholesalePrice: 40000, unitsPerCase: 24, stock: 43, lowStockThreshold: 24, expiryDate: '2025-12-31' },
-  { id: 'prod_2', name: 'Jameson Irish Whiskey', category: 'Spirits', retailPrice: 5000, wholesalePrice: 55000, unitsPerCase: 12, stock: 10, lowStockThreshold: 6, expiryDate: '2028-10-20' },
-  { id: 'prod_3', name: 'Coca-Cola 500ml', category: 'Soft Drinks', retailPrice: 500, wholesalePrice: 10000, unitsPerCase: 24, stock: 150, lowStockThreshold: 50, expiryDate: '2025-06-30' },
-  { id: 'prod_4', name: 'Four Cousins Red Wine', category: 'Wines', retailPrice: 15000, wholesalePrice: 80000, unitsPerCase: 6, stock: 5, lowStockThreshold: 3, expiryDate: '2026-01-15' },
-  { id: 'prod_5', name: 'Mützig 500ml', category: 'Beers', retailPrice: 1500, wholesalePrice: 32000, unitsPerCase: 24, stock: 80, lowStockThreshold: 48, expiryDate: '2025-11-01' },
-  { id: 'prod_6', name: 'Fanta Orange 500ml', category: 'Soft Drinks', retailPrice: 500, wholesalePrice: 10000, unitsPerCase: 24, stock: 20, lowStockThreshold: 24, expiryDate: '2025-07-22' },
+  { id: 'prod_1', name: 'Heineken 330ml', category: 'Beers', retailPrice: 2000, wholesalePrice: 40000, unitsPerCase: 24, stock: 43, lowStockThreshold: 24 },
+  { id: 'prod_2', name: 'Jameson Irish Whiskey', category: 'Spirits', retailPrice: 5000, wholesalePrice: 55000, unitsPerCase: 12, stock: 10, lowStockThreshold: 6 },
+  { id: 'prod_3', name: 'Coca-Cola 500ml', category: 'Soft Drinks', retailPrice: 500, wholesalePrice: 10000, unitsPerCase: 24, stock: 150, lowStockThreshold: 50 },
+  { id: 'prod_4', name: 'Four Cousins Red Wine', category: 'Wines', retailPrice: 15000, wholesalePrice: 80000, unitsPerCase: 6, stock: 5, lowStockThreshold: 3 },
+  { id: 'prod_5', name: 'Mützig 500ml', category: 'Beers', retailPrice: 1500, wholesalePrice: 32000, unitsPerCase: 24, stock: 80, lowStockThreshold: 48 },
+  { id: 'prod_6', name: 'Fanta Orange 500ml', category: 'Soft Drinks', retailPrice: 500, wholesalePrice: 10000, unitsPerCase: 24, stock: 20, lowStockThreshold: 24 },
 ];
 
 export const customers: Customer[] = [
