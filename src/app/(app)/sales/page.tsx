@@ -7,11 +7,13 @@ import { Badge } from '@/components/ui/badge';
 import { products as initialProducts, customers as initialCustomers, sales as initialSales } from '@/lib/data';
 import type { Product, Sale, Customer } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MinusCircle, PlusCircle, ShoppingCart, X, CreditCard, Wallet } from 'lucide-react';
+import { MinusCircle, PlusCircle, ShoppingCart, X, CreditCard, Wallet, UserPlus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { AddCustomerForm } from '@/components/customers/add-customer-form';
 
 type CartItem = {
   product: Product;
@@ -27,8 +29,29 @@ export default function SalesPage() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCustomer, setSelectedCustomer] = useState<string>('walk-in');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('cash');
+  const [isAddCustomerOpen, setIsAddCustomerOpen] = useState(false);
 
   const { toast } = useToast();
+
+  const handleAddCustomer = (newCustomerData: Omit<Customer, 'id' | 'avatarUrl' | 'debt'>) => {
+    const newCustomer: Customer = {
+      ...newCustomerData,
+      id: `cust_${customers.length + 1}`,
+      debt: 0,
+      avatarUrl: `https://picsum.photos/seed/${customers.length + 1}/40/40`,
+    };
+    setCustomers(prev => {
+        const updatedCustomers = [...prev, newCustomer];
+        setSelectedCustomer(newCustomer.id);
+        return updatedCustomers;
+    });
+    setIsAddCustomerOpen(false);
+    toast({
+        title: 'Customer Added',
+        description: `${newCustomer.name} has been successfully added and selected.`
+    })
+  };
+
 
   const addToCart = (product: Product) => {
     setCart(prevCart => {
@@ -101,7 +124,7 @@ export default function SalesPage() {
     if (paymentMethod === 'credit' && selectedCustomer === 'walk-in') {
       toast({
         title: 'Invalid Customer',
-        description: 'Please select a registered customer for credit sales.',
+        description: 'Please select or add a registered customer for credit sales.',
         variant: 'destructive'
       });
       return;
@@ -119,7 +142,7 @@ export default function SalesPage() {
       customerName: selectedCustomer === 'walk-in' ? 'Walk-in' : customers.find(c => c.id === selectedCustomer)?.name || 'Unknown',
       date: new Date().toISOString(),
     };
-    setSales(prev => [...prev, newSale]);
+    setSales(prev => [newSale, ...prev]);
 
     // 2. Update stock levels
     setProducts(prevProducts => {
@@ -217,22 +240,38 @@ export default function SalesPage() {
              <CardFooter className="flex-col items-stretch space-y-4 border-t pt-4">
                 <div className="space-y-2">
                     <Label>Customer</Label>
-                    <Select onValueChange={setSelectedCustomer} value={selectedCustomer}>
-                        <SelectTrigger>
-                            <SelectValue placeholder="Select a customer..." />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="walk-in">Walk-in Customer</SelectItem>
-                            {customers.map(customer => (
-                                <SelectItem key={customer.id} value={customer.id}>{customer.name}</SelectItem>
-                            ))}
-                        </SelectContent>
-                    </Select>
+                    <div className="flex gap-2">
+                      <Select onValueChange={setSelectedCustomer} value={selectedCustomer}>
+                          <SelectTrigger>
+                              <SelectValue placeholder="Select a customer..." />
+                          </SelectTrigger>
+                          <SelectContent>
+                              <SelectItem value="walk-in">Walk-in Customer</SelectItem>
+                              {customers.map(customer => (
+                                  <SelectItem key={customer.id} value={customer.id}>{customer.name}</SelectItem>
+                              ))}
+                          </SelectContent>
+                      </Select>
+                       <Dialog open={isAddCustomerOpen} onOpenChange={setIsAddCustomerOpen}>
+                          <DialogTrigger asChild>
+                              <Button variant="outline" size="icon">
+                                  <UserPlus className="h-4 w-4" />
+                              </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[425px]">
+                              <DialogHeader>
+                                  <DialogTitle>Add New Customer</DialogTitle>
+                                  <DialogDescription>Create a new customer profile. They will be automatically selected.</DialogDescription>
+                              </DialogHeader>
+                              <AddCustomerForm onAddCustomer={handleAddCustomer} />
+                          </DialogContent>
+                      </Dialog>
+                    </div>
                 </div>
 
                 <div className="space-y-2">
                   <Label>Payment Method</Label>
-                  <RadioGroup defaultValue="cash" className="flex" onValueChange={(value: PaymentMethod) => setPaymentMethod(value)}>
+                  <RadioGroup value={paymentMethod} className="flex" onValueChange={(value: PaymentMethod) => setPaymentMethod(value)}>
                     <div className="flex items-center space-x-2">
                       <RadioGroupItem value="cash" id="cash" />
                       <Label htmlFor="cash" className="flex items-center gap-2 cursor-pointer"><Wallet className="w-4 h-4" /> Cash</Label>
