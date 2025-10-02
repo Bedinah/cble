@@ -12,7 +12,7 @@ import { Terminal } from 'lucide-react';
 import type { AnalyzeStockDepletionAndSuggestRestockOutput } from '@/ai/flows/analyze-stock-depletion-and-suggest-restock';
 import { useToast } from '@/hooks/use-toast';
 
-type AnalysisResult = AnalyzeStockDepletionAndSuggestRestockOutput &amp; { error?: string };
+type AnalysisResult = AnalyzeStockDepletionAndSuggestRestockOutput & { error?: string };
 
 export function StockAnalysis() {
   const [selectedProductId, setSelectedProductId] = useState<string>('');
