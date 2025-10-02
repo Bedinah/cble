@@ -59,14 +59,14 @@ export default function DashboardPage() {
           title="Revenue (Today)"
           value={`RWF ${revenueToday.toLocaleString()}`}
           icon={DollarSign}
-          description={`${revenueChange >= 0 ? '+' : ''}${revenueChange.toFixed(1)}% from yesterday`}
+          description={`${revenueChange >= 0 ? '+' : ''}${revenueChange.toFixed(1)}% from RWF ${revenueYesterday.toLocaleString()}`}
           colorClass={revenueChange >= 0 ? 'text-accent' : 'text-destructive'}
         />
         <StatCard
           title="Expenses (Today)"
           value={`RWF ${expensesToday.toLocaleString()}`}
           icon={TrendingDown}
-          description={`${expensesChange >= 0 ? '+' : ''}${expensesChange.toFixed(1)}% from yesterday`}
+          description={`${expensesChange >= 0 ? '+' : ''}${expensesChange.toFixed(1)}% from RWF ${expensesYesterday.toLocaleString()}`}
           colorClass={expensesChange > 0 ? 'text-destructive' : 'text-accent'}
         />
         <StatCard
