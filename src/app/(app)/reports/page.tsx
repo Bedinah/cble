@@ -19,17 +19,9 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 export default function ReportsPage() {
   const customersWithDebt = customers.filter(c => c.debt > 0);
 
-  // We need to determine if a sale was on credit.
-  // In our current data, we can assume a sale to a named customer might be on credit,
-  // especially if that customer has debt. A real implementation would store payment method on the sale.
   const getSaleStatus = (sale: (typeof sales)[0]) => {
-     const customer = customers.find(c => c.name === sale.customerName);
-     if (sale.customerName === 'Walk-in') return { text: 'Paid', variant: 'secondary' as const, className: 'bg-green-100 text-green-800' };
-     // This is a simplification. A real app would store the payment method with the sale.
-     // We assume if a customer has debt, some of their sales might be on credit.
-     // For this mock, let's mark the most recent sale of a customer with debt as 'On Credit'.
-     const lastSaleForCustomer = sales.find(s => s.customerName === customer?.name);
-     if (customer && customer.debt > 0 && lastSaleForCustomer?.id === sale.id) {
+     const debt = sale.total - sale.amountPaid;
+     if (debt > 0) {
        return { text: 'On Credit', variant: 'destructive' as const, className: 'bg-yellow-500 text-black hover:bg-yellow-600' };
      }
      return { text: 'Paid', variant: 'secondary' as const, className: 'bg-green-100 text-green-800' };
@@ -57,27 +49,34 @@ export default function ReportsPage() {
                     <TableHead>Date</TableHead>
                     <TableHead>Customer</TableHead>
                     <TableHead>Items</TableHead>
-                    <TableHead>Total</TableHead>
+                    <TableHead>Total Amount</TableHead>
+                    <TableHead>Amount Paid</TableHead>
+                    <TableHead>Remaining Debt</TableHead>
                     <TableHead>Status</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {sales.map(sale => {
                     const status = getSaleStatus(sale);
+                    const remainingDebt = sale.total - sale.amountPaid;
                     return (
                         <TableRow key={sale.id}>
-                        <TableCell className="font-medium">{format(new Date(sale.date), 'dd MMM, yyyy')}</TableCell>
-                        <TableCell>{sale.customerName}</TableCell>
-                        <TableCell className="text-muted-foreground text-xs">
-                           {sale.items.map(item => {
-                               const product = products.find(p => p.id === item.productId);
-                               return <div key={item.productId}>{item.quantity}x {product?.name || 'Unknown'}</div>
-                           })}
-                        </TableCell>
-                        <TableCell className="font-bold">RWF {sale.total.toLocaleString()}</TableCell>
-                        <TableCell>
-                            <Badge variant={status.variant} className={status.className}>{status.text}</Badge>
-                        </TableCell>
+                          <TableCell className="font-medium">{format(new Date(sale.date), 'dd MMM, yyyy')}</TableCell>
+                          <TableCell>{sale.customerName}</TableCell>
+                          <TableCell className="text-muted-foreground text-xs">
+                            {sale.items.map(item => {
+                                const product = products.find(p => p.id === item.productId);
+                                return <div key={item.productId}>{item.quantity}x {product?.name || 'Unknown'}</div>
+                            })}
+                          </TableCell>
+                          <TableCell className="font-bold">RWF {sale.total.toLocaleString()}</TableCell>
+                          <TableCell className="font-medium text-accent">RWF {sale.amountPaid.toLocaleString()}</TableCell>
+                          <TableCell className={`font-bold ${remainingDebt > 0 ? 'text-destructive' : ''}`}>
+                            RWF {remainingDebt.toLocaleString()}
+                          </TableCell>
+                          <TableCell>
+                              <Badge variant={status.variant} className={status.className}>{status.text}</Badge>
+                          </TableCell>
                         </TableRow>
                     );
                   })}

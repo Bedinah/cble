@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -33,8 +33,7 @@ export default function SalesPage() {
   
   const cartTotal = cart.reduce((total, item) => total + item.product.retailPrice * item.quantity, 0);
 
-  // Update amountPaid when cartTotal changes
-  useState(() => {
+  useEffect(() => {
     setAmountPaid(cartTotal);
   }, [cartTotal]);
 
@@ -154,6 +153,7 @@ export default function SalesPage() {
         price: item.product.retailPrice * item.quantity,
       })),
       total: cartTotal,
+      amountPaid: amountPaid,
       customerName: selectedCustomer === 'walk-in' ? 'Walk-in' : customers.find(c => c.id === selectedCustomer)?.name || 'Unknown',
       date: new Date().toISOString(),
     };

@@ -18,11 +18,11 @@ export const customers: Customer[] = [
 ];
 
 export const sales: Sale[] = [
-  { id: 'sale_1', items: [{ productId: 'prod_1', quantity: 2, price: 4000 }, { productId: 'prod_3', quantity: 1, price: 500 }], total: 4500, customerName: 'Jane Smith', date: subHours(new Date(), 2).toISOString() },
-  { id: 'sale_2', items: [{ productId: 'prod_2', quantity: 1, price: 5000 }], total: 5000, customerName: 'Peter Jones', date: subHours(new Date(), 5).toISOString() },
-  { id: 'sale_3', items: [{ productId: 'prod_5', quantity: 6, price: 9000 }], total: 9000, customerName: 'Walk-in', date: subDays(new Date(), 1).toISOString() },
-  { id: 'sale_4', items: [{ productId: 'prod_1', quantity: 12, price: 24000 }], total: 24000, customerName: 'John Doe', date: subDays(new Date(), 2).toISOString() },
-  { id: 'sale_5', items: [{ productId: 'prod_4', quantity: 1, price: 15000 }], total: 15000, customerName: 'Maryanne Wanjiru', date: subDays(new Date(), 3).toISOString() },
+  { id: 'sale_1', items: [{ productId: 'prod_1', quantity: 2, price: 4000 }, { productId: 'prod_3', quantity: 1, price: 500 }], total: 4500, amountPaid: 4500, customerName: 'Jane Smith', date: subHours(new Date(), 2).toISOString() },
+  { id: 'sale_2', items: [{ productId: 'prod_2', quantity: 1, price: 5000 }], total: 5000, amountPaid: 0, customerName: 'Peter Jones', date: subHours(new Date(), 5).toISOString() },
+  { id: 'sale_3', items: [{ productId: 'prod_5', quantity: 6, price: 9000 }], total: 9000, amountPaid: 9000, customerName: 'Walk-in', date: subDays(new Date(), 1).toISOString() },
+  { id: 'sale_4', items: [{ productId: 'prod_1', quantity: 12, price: 24000 }], total: 24000, amountPaid: 10000, customerName: 'John Doe', date: subDays(new Date(), 2).toISOString() },
+  { id: 'sale_5', items: [{ productId: 'prod_4', quantity: 1, price: 15000 }], total: 15000, amountPaid: 7500, customerName: 'Maryanne Wanjiru', date: subDays(new Date(), 3).toISOString() },
 ];
 
 export const expenses: Expense[] = [

@@ -13,6 +13,7 @@ export interface Sale {
   id: string;
   items: { productId: string; quantity: number; price: number }[];
   total: number;
+  amountPaid: number;
   customerName: string;
   date: string;
 }
