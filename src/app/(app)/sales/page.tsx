@@ -154,8 +154,9 @@ export default function SalesPage() {
       })),
       total: cartTotal,
       amountPaid: amountPaid,
-      customerName: selectedCustomer === 'walk-in' ? 'Walk-in' : customers.find(c => c.id === selectedCustomer)?.name || 'Unknown',
+      customerName: customers.find(c => c.id === selectedCustomer)?.name || 'Unknown',
       date: new Date().toISOString(),
+      waiterName: 'Admin', // Defaulting waiter to Admin for now from POS
     };
     setSales(prev => [newSale, ...prev]);
 
@@ -219,7 +220,7 @@ export default function SalesPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2 font-headline">
               <ShoppingCart />
-              Current Order
+              Current Sale
             </CardTitle>
           </CardHeader>
           <CardContent className="flex-1 overflow-y-auto space-y-4">
@@ -264,7 +265,7 @@ export default function SalesPage() {
                           </SelectTrigger>
                           <SelectContent>
                               <SelectItem value="walk-in">Walk-in Customer</SelectItem>
-                              {customers.map(customer => (
+                              {customers.filter(c => c.id !== 'walk-in').map(customer => (
                                   <SelectItem key={customer.id} value={customer.id}>{customer.name}</SelectItem>
                               ))}
                           </SelectContent>

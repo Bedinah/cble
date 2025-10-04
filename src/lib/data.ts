@@ -1,5 +1,11 @@
-import type { Product, Sale, Customer, Expense } from './types';
+import type { Product, Sale, Customer, Expense, Waiter, Order } from './types';
 import { subDays, subHours } from 'date-fns';
+
+export const waiters: Waiter[] = [
+  { id: 'waiter_1', name: 'Alice' },
+  { id: 'waiter_2', name: 'Bob' },
+  { id: 'waiter_3', name: 'Charlie' },
+];
 
 export const products: Product[] = [
   { id: 'prod_1', name: 'Heineken 330ml', category: 'Beers', retailPrice: 2000, wholesalePrice: 40000, unitsPerCase: 24, stock: 43, lowStockThreshold: 24 },
@@ -15,19 +21,48 @@ export const customers: Customer[] = [
   { id: 'cust_2', name: 'Jane Smith', contact: '+250788654321', debt: 0, avatarUrl: 'https://picsum.photos/seed/2/40/40' },
   { id: 'cust_3', name: 'Peter Jones', contact: '+250788987654', debt: 5000, avatarUrl: 'https://picsum.photos/seed/3/40/40' },
   { id: 'cust_4', name: 'Maryanne Wanjiru', contact: '+250722112233', debt: 22500, avatarUrl: 'https://picsum.photos/seed/4/40/40' },
+  { id: 'walk-in', name: 'Walk-in Customer', contact: '', debt: 0, avatarUrl: ''},
 ];
 
 export const sales: Sale[] = [
-  { id: 'sale_1', items: [{ productId: 'prod_1', quantity: 2, price: 4000 }, { productId: 'prod_3', quantity: 1, price: 500 }], total: 4500, amountPaid: 4500, customerName: 'Jane Smith', date: subHours(new Date(), 2).toISOString() },
-  { id: 'sale_2', items: [{ productId: 'prod_2', quantity: 1, price: 5000 }], total: 5000, amountPaid: 0, customerName: 'Peter Jones', date: subHours(new Date(), 5).toISOString() },
-  { id: 'sale_3', items: [{ productId: 'prod_5', quantity: 6, price: 9000 }], total: 9000, amountPaid: 9000, customerName: 'Walk-in', date: subDays(new Date(), 1).toISOString() },
-  { id: 'sale_4', items: [{ productId: 'prod_1', quantity: 12, price: 24000 }], total: 24000, amountPaid: 10000, customerName: 'John Doe', date: subDays(new Date(), 2).toISOString() },
-  { id: 'sale_5', items: [{ productId: 'prod_4', quantity: 1, price: 15000 }], total: 15000, amountPaid: 7500, customerName: 'Maryanne Wanjiru', date: subDays(new Date(), 3).toISOString() },
+  { id: 'sale_1', items: [{ productId: 'prod_1', quantity: 2, price: 4000 }, { productId: 'prod_3', quantity: 1, price: 500 }], total: 4500, amountPaid: 4500, customerName: 'Jane Smith', date: subHours(new Date(), 2).toISOString(), waiterName: 'Alice' },
+  { id: 'sale_2', items: [{ productId: 'prod_2', quantity: 1, price: 5000 }], total: 5000, amountPaid: 0, customerName: 'Peter Jones', date: subHours(new Date(), 5).toISOString(), waiterName: 'Bob' },
+  { id: 'sale_3', items: [{ productId: 'prod_5', quantity: 6, price: 9000 }], total: 9000, amountPaid: 9000, customerName: 'Walk-in', date: subDays(new Date(), 1).toISOString(), waiterName: 'Charlie' },
+  { id: 'sale_4', items: [{ productId: 'prod_1', quantity: 12, price: 24000 }], total: 24000, amountPaid: 10000, customerName: 'John Doe', date: subDays(new Date(), 2).toISOString(), waiterName: 'Alice' },
+  { id: 'sale_5', items: [{ productId: 'prod_4', quantity: 1, price: 15000 }], total: 15000, amountPaid: 7500, customerName: 'Maryanne Wanjiru', date: subDays(new Date(), 3).toISOString(), waiterName: 'Bob' },
 ];
 
 export const expenses: Expense[] = [
-  { id: 'exp_1', category: 'Purchases', amount: 80000, description: 'Restocked Heineken &amp; Mützig', date: subDays(new Date(), 1).toISOString() },
+  { id: 'exp_1', category: 'Purchases', amount: 80000, description: 'Restocked Heineken & Mützig', date: subDays(new Date(), 1).toISOString() },
   { id: 'exp_2', category: 'Salaries', amount: 150000, description: 'Staff salaries for May', date: subDays(new Date(), 2).toISOString() },
   { id: 'exp_3', category: 'Utilities', amount: 25000, description: 'Electricity bill', date: subDays(new Date(), 4).toISOString() },
   { id: 'exp_4', category: 'Rent', amount: 200000, description: 'June Rent', date: subDays(new Date(), 5).toISOString() },
 ];
+
+
+export const orders: Order[] = [
+    {
+        id: 'order_1',
+        items: [{ productId: 'prod_1', quantity: 5, price: 10000 }],
+        total: 10000,
+        amountPaid: 0,
+        customerName: 'John Doe',
+        customerId: 'cust_1',
+        waiterName: 'Alice',
+        waiterId: 'waiter_1',
+        date: subHours(new Date(), 1).toISOString(),
+        status: 'pending'
+    },
+    {
+        id: 'order_2',
+        items: [{ productId: 'prod_5', quantity: 2, price: 3000 }, { productId: 'prod_3', quantity: 2, price: 1000 }],
+        total: 4000,
+        amountPaid: 2000,
+        customerName: 'Maryanne Wanjiru',
+        customerId: 'cust_4',
+        waiterName: 'Bob',
+        waiterId: 'waiter_2',
+        date: subHours(new Date(), 3).toISOString(),
+        status: 'partial'
+    }
+]

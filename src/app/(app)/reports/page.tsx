@@ -48,6 +48,7 @@ export default function ReportsPage() {
                   <TableRow>
                     <TableHead>Date</TableHead>
                     <TableHead>Customer</TableHead>
+                    <TableHead>Waiter</TableHead>
                     <TableHead>Items</TableHead>
                     <TableHead>Total Amount</TableHead>
                     <TableHead>Amount Paid</TableHead>
@@ -63,6 +64,7 @@ export default function ReportsPage() {
                         <TableRow key={sale.id}>
                           <TableCell className="font-medium">{format(new Date(sale.date), 'dd MMM, yyyy')}</TableCell>
                           <TableCell>{sale.customerName}</TableCell>
+                          <TableCell>{sale.waiterName}</TableCell>
                           <TableCell className="text-muted-foreground text-xs">
                             {sale.items.map(item => {
                                 const product = products.find(p => p.id === item.productId);
