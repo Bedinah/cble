@@ -18,7 +18,6 @@ import {
   LayoutDashboard,
   Beer,
   Boxes,
-  ShoppingCart,
   Users,
   FileText,
   BarChart3,
@@ -32,7 +31,6 @@ import { UserNav } from './user-nav';
 const menuItems = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/orders', label: 'Orders', icon: ClipboardList },
-  { href: '/sales', label: 'POS', icon: ShoppingCart },
   { href: '/products', label: 'Products', icon: Beer },
   { href: '/stock', label: 'Stock', icon: Boxes },
   { href: '/customers', label: 'Customers', icon: Users },
