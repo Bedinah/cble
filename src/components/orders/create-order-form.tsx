@@ -26,6 +26,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { MinusCircle, PlusCircle, X } from 'lucide-react';
 import type { Order, Product, Customer, Waiter } from '@/lib/types';
 import { useToast } from '@/hooks/use-toast';
+import { Badge } from '@/components/ui/badge';
 
 const orderItemSchema = z.object({
   productId: z.string().min(1),
