@@ -24,19 +24,21 @@ export const customers: Customer[] = [
   { id: 'walk-in', name: 'Walk-in Customer', contact: '', debt: 0, avatarUrl: ''},
 ];
 
+const now = new Date();
+
 export const sales: Sale[] = [
-  { id: 'sale_1', items: [{ productId: 'prod_1', quantity: 2, price: 4000 }, { productId: 'prod_3', quantity: 1, price: 500 }], total: 4500, amountPaid: 4500, customerName: 'Jane Smith', date: subHours(new Date(), 2).toISOString(), waiterName: 'Alice' },
-  { id: 'sale_2', items: [{ productId: 'prod_2', quantity: 1, price: 5000 }], total: 5000, amountPaid: 0, customerName: 'Peter Jones', date: subHours(new Date(), 5).toISOString(), waiterName: 'Bob' },
-  { id: 'sale_3', items: [{ productId: 'prod_5', quantity: 6, price: 9000 }], total: 9000, amountPaid: 9000, customerName: 'Walk-in', date: subDays(new Date(), 1).toISOString(), waiterName: 'Charlie' },
-  { id: 'sale_4', items: [{ productId: 'prod_1', quantity: 12, price: 24000 }], total: 24000, amountPaid: 10000, customerName: 'John Doe', date: subDays(new Date(), 2).toISOString(), waiterName: 'Alice' },
-  { id: 'sale_5', items: [{ productId: 'prod_4', quantity: 1, price: 15000 }], total: 15000, amountPaid: 7500, customerName: 'Maryanne Wanjiru', date: subDays(new Date(), 3).toISOString(), waiterName: 'Bob' },
+  { id: 'sale_1', items: [{ productId: 'prod_1', quantity: 2, price: 4000 }, { productId: 'prod_3', quantity: 1, price: 500 }], total: 4500, amountPaid: 4500, customerName: 'Jane Smith', date: new Date(2024, 5, 4, 18, 30).toISOString(), waiterName: 'Alice' },
+  { id: 'sale_2', items: [{ productId: 'prod_2', quantity: 1, price: 5000 }], total: 5000, amountPaid: 0, customerName: 'Peter Jones', date: new Date(2024, 5, 4, 15, 0).toISOString(), waiterName: 'Bob' },
+  { id: 'sale_3', items: [{ productId: 'prod_5', quantity: 6, price: 9000 }], total: 9000, amountPaid: 9000, customerName: 'Walk-in', date: new Date(2024, 5, 3, 12, 0).toISOString(), waiterName: 'Charlie' },
+  { id: 'sale_4', items: [{ productId: 'prod_1', quantity: 12, price: 24000 }], total: 24000, amountPaid: 10000, customerName: 'John Doe', date: new Date(2024, 5, 2, 10, 0).toISOString(), waiterName: 'Alice' },
+  { id: 'sale_5', items: [{ productId: 'prod_4', quantity: 1, price: 15000 }], total: 15000, amountPaid: 7500, customerName: 'Maryanne Wanjiru', date: new Date(2024, 5, 1, 14, 0).toISOString(), waiterName: 'Bob' },
 ];
 
 export const expenses: Expense[] = [
-  { id: 'exp_1', category: 'Purchases', amount: 80000, description: 'Restocked Heineken & Mützig', date: subDays(new Date(), 1).toISOString() },
-  { id: 'exp_2', category: 'Salaries', amount: 150000, description: 'Staff salaries for May', date: subDays(new Date(), 2).toISOString() },
-  { id: 'exp_3', category: 'Utilities', amount: 25000, description: 'Electricity bill', date: subDays(new Date(), 4).toISOString() },
-  { id: 'exp_4', category: 'Rent', amount: 200000, description: 'June Rent', date: subDays(new Date(), 5).toISOString() },
+  { id: 'exp_1', category: 'Purchases', amount: 80000, description: 'Restocked Heineken & Mützig', date: new Date(2024, 5, 3, 9, 0).toISOString() },
+  { id: 'exp_2', category: 'Salaries', amount: 150000, description: 'Staff salaries for May', date: new Date(2024, 5, 2, 11, 0).toISOString() },
+  { id: 'exp_3', category: 'Utilities', amount: 25000, description: 'Electricity bill', date: new Date(2024, 5, 0, 16, 0).toISOString() },
+  { id: 'exp_4', category: 'Rent', amount: 200000, description: 'June Rent', date: new Date(2024, 4, 29, 13, 0).toISOString() },
 ];
 
 
@@ -50,7 +52,7 @@ export const orders: Order[] = [
         customerId: 'cust_1',
         waiterName: 'Alice',
         waiterId: 'waiter_1',
-        date: subHours(new Date(), 1).toISOString(),
+        date: new Date(2024, 5, 4, 19, 0).toISOString(),
         status: 'pending'
     },
     {
@@ -62,7 +64,7 @@ export const orders: Order[] = [
         customerId: 'cust_4',
         waiterName: 'Bob',
         waiterId: 'waiter_2',
-        date: subHours(new Date(), 3).toISOString(),
+        date: new Date(2024, 5, 4, 17, 0).toISOString(),
         status: 'partial'
     }
 ]
