@@ -1,3 +1,4 @@
+
 'use client';
 
 import * as React from 'react';
@@ -46,43 +47,51 @@ function ClientOnlySidebar({
   children: React.ReactNode;
   pathname: string;
 }) {
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <SidebarHeader>
-          <Logo />
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            {menuItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={pathname.startsWith(item.href)}
-                  tooltip={item.label}
-                >
-                  <a href={item.href}>
-                    <item.icon />
-                    <span>{item.label}</span>
+    <>
+      {isClient && (
+        <Sidebar>
+          <SidebarHeader>
+            <Logo />
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMenu>
+              {menuItems.map((item) => (
+                <SidebarMenuItem key={item.href}>
+                  <SidebarMenuButton
+                    asChild
+                    isActive={pathname.startsWith(item.href)}
+                    tooltip={item.label}
+                  >
+                    <a href={item.href}>
+                      <item.icon />
+                      <span>{item.label}</span>
+                    </a>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
+            </SidebarMenu>
+          </SidebarContent>
+          <SidebarFooter>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip="Settings" isActive={pathname === '/settings'}>
+                  <a href="/settings">
+                    <Settings />
+                    <span>Settings</span>
                   </a>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            ))}
-          </SidebarMenu>
-        </SidebarContent>
-        <SidebarFooter>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip="Settings" isActive={pathname === '/settings'}>
-                <a href="/settings">
-                  <Settings />
-                  <span>Settings</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarFooter>
-      </Sidebar>
+            </SidebarMenu>
+          </SidebarFooter>
+        </Sidebar>
+      )}
       <SidebarInset>
         <header className="flex h-14 items-center justify-between border-b bg-card px-4 lg:px-6">
           <SidebarTrigger className="md:hidden" />
@@ -94,30 +103,19 @@ function ClientOnlySidebar({
           {children}
         </main>
       </SidebarInset>
-    </SidebarProvider>
+    </>
   );
 }
 
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [isClient, setIsClient] = React.useState(false);
-
-  React.useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  if (!isClient) {
-    return (
-      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
-        {children}
-      </main>
-    );
-  }
 
   return (
-    <ClientOnlySidebar pathname={pathname}>
-      {children}
-    </ClientOnlySidebar>
+    <SidebarProvider>
+      <ClientOnlySidebar pathname={pathname}>
+        {children}
+      </ClientOnlySidebar>
+    </SidebarProvider>
   );
 }
