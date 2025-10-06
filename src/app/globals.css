@@ -14,7 +14,7 @@ body {
     --card-foreground: 222 47% 11%;
     --popover: 0 0% 100%;
     --popover-foreground: 222 47% 11%;
-    --primary: 222 47% 11%;
+    --primary: 240 66% 31%; /* #1C1C84 */
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 92.1%;
     --secondary-foreground: 222 47% 11%;
@@ -26,21 +26,21 @@ body {
     --destructive-foreground: 210 40% 98%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;
-    --ring: 222 47% 11%;
+    --ring: 240 66% 31%;
     --chart-1: 222 47% 11%;
     --chart-2: 160 84% 39%;
     --chart-3: 43 74% 66%;
     --chart-4: 27 87% 67%;
     --chart-5: 0 72% 51%;
     --radius: 0.5rem;
-    --sidebar-background: 222 47% 11%;
-    --sidebar-foreground: 210 40% 96.1%;
-    --sidebar-primary: 160 84% 39%;
+    --sidebar-background: 210 40% 96.1%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 240 66% 31%;
     --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 222 47% 16%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 47% 16%;
-    --sidebar-ring: 160 84% 39%;
+    --sidebar-accent: 210 40% 92.1%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 91%;
+    --sidebar-ring: 240 66% 31%;
   }
 
   .dark {
@@ -50,7 +50,7 @@ body {
     --card-foreground: 210 40% 96.1%;
     --popover: 222 47% 11%;
     --popover-foreground: 210 40% 96.1%;
-    --primary: 210 40% 98%;
+    --primary: 240 70% 70%; /* Lighter version of #1C1C84 for dark mode */
     --primary-foreground: 222 47% 11%;
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
@@ -62,20 +62,20 @@ body {
     --destructive-foreground: 210 40% 98%;
     --border: 217 33% 17%;
     --input: 217 33% 17%;
-    --ring: 160 84% 39%;
+    --ring: 240 70% 70%;
     --chart-1: 210 40% 98%;
     --chart-2: 160 84% 39%;
     --chart-3: 43 74% 66%;
     --chart-4: 27 87% 67%;
     --chart-5: 0 63% 31%;
-    --sidebar-background: 222 47% 8%;
+    --sidebar-background: 222 47% 11%;
     --sidebar-foreground: 210 40% 96.1%;
-    --sidebar-primary: 160 84% 39%;
-    --sidebar-primary-foreground: 210 40% 98%;
-    --sidebar-accent: 222 47% 14%;
+    --sidebar-primary: 240 70% 70%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 17%;
     --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222 47% 14%;
-    --sidebar-ring: 160 84% 39%;
+    --sidebar-border: 217 33% 17%;
+    --sidebar-ring: 240 70% 70%;
   }
 }
 
