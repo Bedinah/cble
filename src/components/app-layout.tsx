@@ -22,7 +22,6 @@ import {
   FileText,
   BarChart3,
   Settings,
-  Flame,
   ClipboardList,
   ShoppingCart,
 } from 'lucide-react';
@@ -40,9 +39,13 @@ const menuItems = [
   { href: '/reports', label: 'Reports', icon: BarChart3 },
 ];
 
-export function AppLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-
+function ClientOnlySidebar({
+  children,
+  pathname,
+}: {
+  children: React.ReactNode;
+  pathname: string;
+}) {
   return (
     <SidebarProvider>
       <Sidebar>
@@ -95,4 +98,26 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   );
 }
 
-    
+
+export function AppLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const [isClient, setIsClient] = React.useState(false);
+
+  React.useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  if (!isClient) {
+    return (
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8">
+        {children}
+      </main>
+    );
+  }
+
+  return (
+    <ClientOnlySidebar pathname={pathname}>
+      {children}
+    </ClientOnlySidebar>
+  );
+}
